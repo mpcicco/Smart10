@@ -1,11 +1,10 @@
-import { useEffect, useMemo, useState } from 'react'
+import { useEffect, useMemo, useRef, useState } from 'react'
 import { Navigate, Route, Routes, useNavigate } from 'react-router-dom'
 import {
   answerTrueFalse,
   applyQuestionVote,
   confirmManualAnswer,
   createGame,
-  currentPlayer,
   passTurn,
   prepareManualResolution,
   startNextRound,
@@ -169,14 +168,23 @@ const Setup = ({ deck, onStart }: { deck: Deck; onStart: (state: GameState) => v
       {step === 3 ? (
         <section className="panel setup-step">
           <h2>Quali categorie vuoi usare?</h2>
+          <p className="categories-summary">
+            Selezionate: {selectedCategories.length} / {deck.categories.length}
+          </p>
+          <p className="categories-hint">
+            Tutte partono selezionate. Tocca una categoria per escluderla o reincluderla.
+          </p>
           <div className="chip-grid">
             {deck.categories.map((category) => (
               <button
                 key={category}
                 className={`chip ${selectedCategories.includes(category) ? 'selected' : ''}`}
                 onClick={() => toggleCategory(category)}
+                aria-pressed={selectedCategories.includes(category)}
               >
-                {category}
+                <span className="chip-status">{selectedCategories.includes(category) ? '✓' : '○'}</span>
+                <span>{category}</span>
+                <small>{selectedCategories.includes(category) ? 'Selezionata' : 'Esclusa'}</small>
               </button>
             ))}
           </div>
@@ -233,29 +241,49 @@ const Play = ({
 }) => {
   const navigate = useNavigate()
   const question = state.currentQuestion
-  const player = currentPlayer(state)
-  const [selectedSlot, setSelectedSlot] = useState<SlotKey | null>(null)
+  const [tfFeedback, setTfFeedback] = useState<{ slotKey: SlotKey; correct: boolean } | null>(null)
+  const feedbackTimerRef = useRef<number | null>(null)
 
   useEffect(() => {
     if (state.phase === 'voteQuestion') navigate('/vote')
     if (state.phase === 'gameOver') navigate('/game-over')
   }, [navigate, state.phase])
 
-  useEffect(() => {
-    setSelectedSlot(null)
-  }, [state.currentQuestion?.id, state.usedSlots.length])
+  useEffect(
+    () => () => {
+      if (feedbackTimerRef.current) {
+        window.clearTimeout(feedbackTimerRef.current)
+      }
+    },
+    [],
+  )
 
   if (!question) {
     return <Navigate to="/setup" replace />
   }
 
   const onSlotClick = (slotKey: SlotKey) => {
+    if (tfFeedback) return
     if (state.usedSlots.includes(slotKey)) return
     if (question.type === 'true_false') {
-      setSelectedSlot(slotKey)
+      const correct = question.payload.truthBySlot[slotKey] === true
+      setTfFeedback({ slotKey, correct })
+      feedbackTimerRef.current = window.setTimeout(() => {
+        setState(answerTrueFalse(state, slotKey, true))
+        setTfFeedback(null)
+      }, 650)
       return
     }
     setState(prepareManualResolution(state, slotKey))
+  }
+
+  const skipQuestion = () => {
+    if (!state.currentQuestion) return
+    const withQuestionRef = { ...state, lastRoundQuestionId: state.currentQuestion.id }
+    const voted = applyQuestionVote(withQuestionRef, 'skip')
+    const next = startNextRound(voted)
+    setState(next)
+    if (next.phase === 'gameOver') navigate('/game-over')
   }
 
   const slots = useMemo(
@@ -293,31 +321,13 @@ const Play = ({
             )
           })}
           <div className="players-controls">
-            <p className="round-summary"><strong>Turno:</strong> {player.name}</p>
             <div className="action-bar">
-              <button className="warn" onClick={() => setState(passTurn(state))}>
+              <button className="warn pass-btn" onClick={() => setState(passTurn(state))}>
                 Passa
               </button>
-              {question.type === 'true_false' ? (
-                <>
-                  <button
-                    className="cta"
-                    onClick={() => selectedSlot && setState(answerTrueFalse(state, selectedSlot, true))}
-                    disabled={!selectedSlot}
-                  >
-                    Segna vero
-                  </button>
-                  <button
-                    className="cta"
-                    onClick={() => selectedSlot && setState(answerTrueFalse(state, selectedSlot, false))}
-                    disabled={!selectedSlot}
-                  >
-                    Segna falso
-                  </button>
-                </>
-              ) : (
-                <p>Seleziona uno slot, rispondi a voce e poi conferma l'esito.</p>
-              )}
+              <button className="warn skip-btn" onClick={skipQuestion}>
+                Salta
+              </button>
             </div>
           </div>
         </aside>
@@ -326,10 +336,22 @@ const Play = ({
           {slots.map((slot) => (
             <button
               key={slot.key}
-              className={`slot ${state.usedSlots.includes(slot.key) ? 'used' : ''}`}
+              className={`slot ${state.usedSlots.includes(slot.key) ? 'used' : ''} ${
+                question.type === 'true_false'
+                  ? question.payload.truthBySlot[slot.key]
+                    ? 'slot-truth-true'
+                    : 'slot-truth-false'
+                  : ''
+              } ${
+                tfFeedback?.slotKey === slot.key
+                  ? tfFeedback.correct
+                    ? 'feedback-correct'
+                    : 'feedback-wrong'
+                  : ''
+              }`}
               style={{ left: `${slot.x}%`, top: `${slot.y}%` }}
               onClick={() => onSlotClick(slot.key)}
-              disabled={state.usedSlots.includes(slot.key) || state.phase === 'manualResolution'}
+              disabled={state.usedSlots.includes(slot.key) || state.phase === 'manualResolution' || tfFeedback !== null}
             >
               <span>{slot.key}</span>
               <small>{slot.label}</small>
@@ -338,7 +360,6 @@ const Play = ({
           <div className="question-core">
             <p className="category">{question.category}</p>
             <h2>{question.prompt}</h2>
-            <p>Turno: {player.name}</p>
           </div>
           </div>
         </main>
@@ -387,7 +408,6 @@ const Vote = ({
       <div className="vote-actions">
         <button className="cta" onClick={() => submitVote('up')}>Pollice su</button>
         <button className="warn" onClick={() => submitVote('down')}>Pollice giu</button>
-        <button className="warn" onClick={() => submitVote('skip')}>Salta</button>
       </div>
     </div>
   )
