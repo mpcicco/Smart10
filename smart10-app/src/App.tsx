@@ -226,9 +226,6 @@ const Setup = ({ deck, onStart }: { deck: Deck; onStart: (state: GameState) => v
           <p className="categories-hint">
             Tutte partono selezionate. Tocca una categoria per escluderla o reincluderla.
           </p>
-          <p className="categories-hint">
-            Domande disponibili con selezione attuale: {selectedAvailableCount}
-          </p>
           {setupWarning ? <p className="setup-warning">{setupWarning}</p> : null}
           {storageSnapshot.excludedQuestionIds.length > 0 ? (
             <button
@@ -253,10 +250,7 @@ const Setup = ({ deck, onStart }: { deck: Deck; onStart: (state: GameState) => v
               >
                 <span className="chip-status">{selectedCategories.includes(category) ? '✓' : '○'}</span>
                 <span>{category}</span>
-                <small>
-                  {selectedCategories.includes(category) ? 'Selezionata' : 'Esclusa'} - Disponibili:{' '}
-                  {availableByCategory[category] ?? 0}
-                </small>
+                <small>{selectedCategories.includes(category) ? 'Selezionata' : 'Esclusa'}</small>
               </button>
             ))}
           </div>
@@ -550,8 +544,8 @@ const Play = ({
       {state.phase === 'manualResolution' && state.manualResolution ? (
         <div className="modal">
           <div className="modal-card">
-            <h3>Soluzione</h3>
-            <p>{state.manualResolution.solution}</p>
+            <p className="modal-label">Risposta corretta</p>
+            <p className="modal-answer">{capitalizeFirst(state.manualResolution.solution)}</p>
             <div className="modal-actions">
               <button
                 className="cta"
@@ -599,6 +593,9 @@ const getRevealText = (question: NonNullable<GameState['currentQuestion']>, slot
       return ''
   }
 }
+
+const capitalizeFirst = (value: string) =>
+  value.length > 0 ? value.charAt(0).toUpperCase() + value.slice(1) : value
 
 const GameOver = ({ state }: { state: GameState }) => {
   const winners = state.players.filter((player) => state.winnerIds.includes(player.id))
