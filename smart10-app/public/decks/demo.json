@@ -1,0 +1,343 @@
+{
+  "schemaVersion": "1.1",
+  "deckId": "smart10-it-demo-10x10",
+  "language": "it",
+  "categories": [
+    "geografia",
+    "storia",
+    "scienza",
+    "natura",
+    "arte-e-letteratura",
+    "cinema-e-tv",
+    "musica",
+    "sport",
+    "cultura-generale",
+    "cibo-e-tradizioni"
+  ],
+  "questions": [
+    {
+      "id": "q001",
+      "type": "true_false",
+      "category": "geografia",
+      "prompt": "Quali di questi paesi confinano con l'Italia?",
+      "slots": [
+        { "key": "A", "label": "Francia" },
+        { "key": "B", "label": "Austria" },
+        { "key": "C", "label": "Svizzera" },
+        { "key": "D", "label": "Slovenia" },
+        { "key": "E", "label": "Germania" },
+        { "key": "F", "label": "Spagna" },
+        { "key": "G", "label": "Croazia" },
+        { "key": "H", "label": "Belgio" },
+        { "key": "I", "label": "San Marino" },
+        { "key": "J", "label": "Portogallo" }
+      ],
+      "payload": {
+        "truthBySlot": {
+          "A": true,
+          "B": true,
+          "C": true,
+          "D": true,
+          "E": false,
+          "F": false,
+          "G": false,
+          "H": false,
+          "I": true,
+          "J": false
+        }
+      }
+    },
+    {
+      "id": "q002",
+      "type": "century_decade",
+      "category": "storia",
+      "prompt": "In quale secolo sono nati questi personaggi?",
+      "slots": [
+        { "key": "A", "label": "Leonardo da Vinci" },
+        { "key": "B", "label": "Galileo Galilei" },
+        { "key": "C", "label": "Napoleone Bonaparte" },
+        { "key": "D", "label": "Giulio Cesare" },
+        { "key": "E", "label": "Garibaldi" },
+        { "key": "F", "label": "Winston Churchill" },
+        { "key": "G", "label": "Mahatma Gandhi" },
+        { "key": "H", "label": "Cleopatra" },
+        { "key": "I", "label": "Cristoforo Colombo" },
+        { "key": "J", "label": "Martin Luther King Jr." }
+      ],
+      "payload": {
+        "mode": "century",
+        "valueBySlot": {
+          "A": "XV",
+          "B": "XVI",
+          "C": "XVIII",
+          "D": "I a.C.",
+          "E": "XIX",
+          "F": "XIX",
+          "G": "XIX",
+          "H": "I a.C.",
+          "I": "XV",
+          "J": "XX"
+        }
+      }
+    },
+    {
+      "id": "q003",
+      "type": "number",
+      "category": "scienza",
+      "prompt": "Quanti pianeti ha il Sistema Solare?",
+      "slots": [
+        { "key": "A", "label": "Mercurio" },
+        { "key": "B", "label": "Venere" },
+        { "key": "C", "label": "Terra" },
+        { "key": "D", "label": "Marte" },
+        { "key": "E", "label": "Giove" },
+        { "key": "F", "label": "Saturno" },
+        { "key": "G", "label": "Urano" },
+        { "key": "H", "label": "Nettuno" },
+        { "key": "I", "label": "Plutone" },
+        { "key": "J", "label": "Cerere" }
+      ],
+      "payload": {
+        "exactBySlot": {
+          "A": 8,
+          "B": 8,
+          "C": 8,
+          "D": 8,
+          "E": 8,
+          "F": 8,
+          "G": 8,
+          "H": 8,
+          "I": 8,
+          "J": 8
+        },
+        "unit": "pianeti"
+      }
+    },
+    {
+      "id": "q004",
+      "type": "open",
+      "category": "natura",
+      "prompt": "Qual e il nome comune di questi animali?",
+      "slots": [
+        { "key": "A", "label": "Canis lupus" },
+        { "key": "B", "label": "Panthera leo" },
+        { "key": "C", "label": "Ursus arctos" },
+        { "key": "D", "label": "Vulpes vulpes" },
+        { "key": "E", "label": "Equus caballus" },
+        { "key": "F", "label": "Bos taurus" },
+        { "key": "G", "label": "Sus scrofa" },
+        { "key": "H", "label": "Ovis aries" },
+        { "key": "I", "label": "Capra hircus" },
+        { "key": "J", "label": "Gallus gallus domesticus" }
+      ],
+      "payload": {
+        "acceptedBySlot": {
+          "A": ["lupo"],
+          "B": ["leone"],
+          "C": ["orso"],
+          "D": ["volpe"],
+          "E": ["cavallo"],
+          "F": ["mucca", "vacca"],
+          "G": ["maiale"],
+          "H": ["pecora"],
+          "I": ["capra"],
+          "J": ["gallina", "pollo"]
+        }
+      }
+    },
+    {
+      "id": "q005",
+      "type": "order",
+      "category": "arte-e-letteratura",
+      "prompt": "Ordina questi autori per anno di nascita (1 = piu antico).",
+      "slots": [
+        { "key": "A", "label": "Dante Alighieri" },
+        { "key": "B", "label": "Shakespeare" },
+        { "key": "C", "label": "Manzoni" },
+        { "key": "D", "label": "Leopardi" },
+        { "key": "E", "label": "Tolstoj" },
+        { "key": "F", "label": "Virginia Woolf" },
+        { "key": "G", "label": "Kafka" },
+        { "key": "H", "label": "Calvino" },
+        { "key": "I", "label": "Umberto Eco" },
+        { "key": "J", "label": "J. K. Rowling" }
+      ],
+      "payload": {
+        "rankBySlot": {
+          "A": 1,
+          "B": 2,
+          "C": 3,
+          "D": 4,
+          "E": 5,
+          "F": 6,
+          "G": 7,
+          "H": 8,
+          "I": 9,
+          "J": 10
+        },
+        "orderLabel": "1 = piu antico"
+      }
+    },
+    {
+      "id": "q006",
+      "type": "open",
+      "category": "cinema-e-tv",
+      "prompt": "Indica il regista del film.",
+      "slots": [
+        { "key": "A", "label": "Pulp Fiction" },
+        { "key": "B", "label": "Inception" },
+        { "key": "C", "label": "Jurassic Park" },
+        { "key": "D", "label": "Il Padrino" },
+        { "key": "E", "label": "La Dolce Vita" },
+        { "key": "F", "label": "Avatar" },
+        { "key": "G", "label": "Titanic" },
+        { "key": "H", "label": "Interstellar" },
+        { "key": "I", "label": "Parasite" },
+        { "key": "J", "label": "La vita e bella" }
+      ],
+      "payload": {
+        "acceptedBySlot": {
+          "A": ["tarantino", "quentin tarantino"],
+          "B": ["nolan", "christopher nolan"],
+          "C": ["spielberg", "steven spielberg"],
+          "D": ["coppola", "francis ford coppola"],
+          "E": ["fellini", "federico fellini"],
+          "F": ["james cameron", "cameron"],
+          "G": ["james cameron", "cameron"],
+          "H": ["nolan", "christopher nolan"],
+          "I": ["bong joon-ho", "bong joon ho"],
+          "J": ["roberto benigni", "benigni"]
+        }
+      }
+    },
+    {
+      "id": "q007",
+      "type": "color",
+      "category": "musica",
+      "prompt": "Qual e il colore principale della copertina dell'album?",
+      "slots": [
+        { "key": "A", "label": "Abbey Road" },
+        { "key": "B", "label": "The Dark Side of the Moon" },
+        { "key": "C", "label": "Nevermind" },
+        { "key": "D", "label": "Thriller" },
+        { "key": "E", "label": "Back in Black" },
+        { "key": "F", "label": "The Joshua Tree" },
+        { "key": "G", "label": "Master of Puppets" },
+        { "key": "H", "label": "25" },
+        { "key": "I", "label": "Random Access Memories" },
+        { "key": "J", "label": "Bollicine" }
+      ],
+      "payload": {
+        "colorBySlot": {
+          "A": "bianco",
+          "B": "nero",
+          "C": "blu",
+          "D": "nero",
+          "E": "nero",
+          "F": "bianco e nero",
+          "G": "rosso",
+          "H": "grigio",
+          "I": "nero",
+          "J": "giallo"
+        }
+      }
+    },
+    {
+      "id": "q008",
+      "type": "number",
+      "category": "sport",
+      "prompt": "Quanti giocatori ci sono in campo per squadra?",
+      "slots": [
+        { "key": "A", "label": "Calcio" },
+        { "key": "B", "label": "Basket" },
+        { "key": "C", "label": "Pallavolo" },
+        { "key": "D", "label": "Rugby union" },
+        { "key": "E", "label": "Pallanuoto" },
+        { "key": "F", "label": "Baseball" },
+        { "key": "G", "label": "Hockey ghiaccio" },
+        { "key": "H", "label": "Pallamano" },
+        { "key": "I", "label": "Futsal" },
+        { "key": "J", "label": "Cricket" }
+      ],
+      "payload": {
+        "exactBySlot": {
+          "A": 11,
+          "B": 5,
+          "C": 6,
+          "D": 15,
+          "E": 7,
+          "F": 9,
+          "G": 6,
+          "H": 7,
+          "I": 5,
+          "J": 11
+        },
+        "unit": "giocatori"
+      }
+    },
+    {
+      "id": "q009",
+      "type": "true_false",
+      "category": "cultura-generale",
+      "prompt": "Quali affermazioni sono vere?",
+      "slots": [
+        { "key": "A", "label": "Canberra e la capitale dell'Australia." },
+        { "key": "B", "label": "Il simbolo chimico dell'oro e Au." },
+        { "key": "C", "label": "Il pianeta piu vicino al Sole e Venere." },
+        { "key": "D", "label": "L'anno bisestile ha 366 giorni." },
+        { "key": "E", "label": "Ottawa e la capitale del Canada." },
+        { "key": "F", "label": "Il Nilo sfocia nel Mar Rosso." },
+        { "key": "G", "label": "Il Taj Mahal si trova in India." },
+        { "key": "H", "label": "Il quadrato ha tre diagonali." },
+        { "key": "I", "label": "La lingua ufficiale del Brasile e lo spagnolo." },
+        { "key": "J", "label": "Il Monte Bianco e in Europa." }
+      ],
+      "payload": {
+        "truthBySlot": {
+          "A": true,
+          "B": true,
+          "C": false,
+          "D": true,
+          "E": true,
+          "F": false,
+          "G": true,
+          "H": false,
+          "I": false,
+          "J": true
+        }
+      }
+    },
+    {
+      "id": "q010",
+      "type": "open",
+      "category": "cibo-e-tradizioni",
+      "prompt": "Indica l'ingrediente principale.",
+      "slots": [
+        { "key": "A", "label": "Guacamole" },
+        { "key": "B", "label": "Hummus" },
+        { "key": "C", "label": "Pesto alla genovese" },
+        { "key": "D", "label": "Risotto alla milanese" },
+        { "key": "E", "label": "Polenta" },
+        { "key": "F", "label": "Sushi nigiri" },
+        { "key": "G", "label": "Gazpacho" },
+        { "key": "H", "label": "Tzatziki" },
+        { "key": "I", "label": "Miso soup" },
+        { "key": "J", "label": "Panna cotta" }
+      ],
+      "payload": {
+        "acceptedBySlot": {
+          "A": ["avocado"],
+          "B": ["ceci"],
+          "C": ["basilico"],
+          "D": ["riso"],
+          "E": ["mais", "farina di mais"],
+          "F": ["riso"],
+          "G": ["pomodoro", "pomodori"],
+          "H": ["yogurt"],
+          "I": ["miso"],
+          "J": ["panna"]
+        }
+      }
+    }
+  ]
+}
