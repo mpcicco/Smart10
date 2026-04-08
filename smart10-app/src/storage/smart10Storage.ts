@@ -56,3 +56,8 @@ export const saveVotes = (votes: Record<string, VoteValue>) => write(keys.votes,
 
 export const savePendingCategories = (categories: Category[]) =>
   write(keys.pendingCategories, categories)
+
+export const clearExcludedAndVotes = () => {
+  write(keys.excluded, [])
+  write(keys.votes, {})
+}
